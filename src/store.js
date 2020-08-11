@@ -11,16 +11,21 @@ export function createStore (options) {
 export class Store {
   constructor (options = {}) {
     if (__DEV__) {
+      // 对Promise进行判断（VueX使用Promise实现异步操作）
       assert(typeof Promise !== 'undefined', `vuex requires a Promise polyfill in this browser.`)
+      // 必须通过 new Store()
       assert(this instanceof Store, `store must be called with the new operator.`)
     }
 
+    // 从配置中获取plugins、strict
+    // strict设置成true时：在严格模式下，无论何时发生了状态变更且不是由 mutation 函数引起的，将会抛出错误。这能保证所有的状态变更都能被调试工具跟踪到。
+    // Vuex 的 store 接受 plugins 选项，这个选项暴露出每次 mutation 的钩子。Vuex 插件就是一个函数，它接收 store 作为唯一参数。在插件中不允许直接修改状态——类似于组件，只能通过提交 mutation 来触发变化。
     const {
       plugins = [],
       strict = false
     } = options
 
-    // store internal state
+    // store internal state ：存储内部状态
     this._committing = false
     this._actions = Object.create(null)
     this._actionSubscribers = []
@@ -105,10 +110,7 @@ export class Store {
       .slice() // shallow copy to prevent iterator invalidation if subscriber synchronously calls unsubscribe
       .forEach(sub => sub(mutation, this.state))
 
-    if (
-      __DEV__ &&
-      options && options.silent
-    ) {
+    if (__DEV__ && options && options.silent) {
       console.warn(
         `[vuex] mutation type: ${type}. Silent option has been removed. ` +
         'Use the filter functionality in the vue-devtools'
