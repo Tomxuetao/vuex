@@ -1,3 +1,4 @@
+import { InjectionKey } from "vue";
 import * as Vuex from "../index";
 
 namespace StoreInstance {
@@ -137,6 +138,14 @@ namespace UseStoreFunction {
   interface State {
     a: string
   }
+
+  const key: InjectionKey<string> = Symbol('store')
+
+  const storeWithKey = Vuex.useStore(key)
+  storeWithKey.state.a
+
+  const storeWithKeyString = Vuex.useStore('store')
+  storeWithKeyString.state.a
 
   const storeWithState = Vuex.useStore<State>()
   storeWithState.state.a
@@ -446,10 +455,17 @@ namespace Plugins {
     });
   }
 
+  class MyLogger {
+    log(message: string) {
+       console.log(message);
+    }
+  }
+
   const logger = Vuex.createLogger<{ value: number }>({
     collapsed: true,
     transformer: state => state.value,
-    mutationTransformer: (mutation: { type: string }) => mutation.type
+    mutationTransformer: (mutation: { type: string }) => mutation.type,
+    logger: new MyLogger()
   });
 
   const store = new Vuex.Store<{ value: number }>({

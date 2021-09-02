@@ -12,7 +12,7 @@ As long as you follow these rules, it's up to you how to structure your project.
 
 For any non-trivial app, we will likely need to leverage modules. Here's an example project structure:
 
-``` bash
+```bash
 ├── index.html
 ├── main.js
 ├── api
@@ -29,4 +29,4 @@ For any non-trivial app, we will likely need to leverage modules. Here's an exam
         └── products.js   # products module
 ```
 
-As a reference, check out the [Shopping Cart Example](https://github.com/vuejs/vuex/tree/dev/examples/shopping-cart).
+As a reference, check out the [Shopping Cart Example](https://github.com/vuejs/vuex/tree/4.0/examples/classic/shopping-cart).
